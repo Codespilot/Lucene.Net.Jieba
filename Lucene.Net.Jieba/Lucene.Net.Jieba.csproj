@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <PackageId>Lucene.Net.Jieba</PackageId>
-        <PackageVersion>4.8.0-beta00014</PackageVersion>
+        <PackageVersion>4.8.0-beta00016</PackageVersion>
         <Authors>damon</Authors>
         <Description>Lucene.Net.Jieba is an analyzer tools for lucene.net which is kind to chinese</Description>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -15,19 +15,19 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="Lucene.Net" Version="4.8.0-*"/>
-        <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-*"/>
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="5.*"/>
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.*"/>
+        <PackageReference Include="Lucene.Net" Version="4.8.0-*" />
+        <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-*" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.9" />
     </ItemGroup>
     <ItemGroup>
-        <None Remove="stopwords.txt"/>
+        <None Remove="stopwords.txt" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Resources\stopwords.txt"/>
+        <EmbeddedResource Include="Resources\stopwords.txt" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Lucene.Net.Jieba.Analyzer\Lucene.Net.Jieba.Analyzer.csproj"/>
-        <ProjectReference Include="..\Lucene.Net.Jieba.Segment\Lucene.Net.Jieba.Segment.csproj"/>
+        <ProjectReference Include="..\Lucene.Net.Jieba.Analyzer\Lucene.Net.Jieba.Analyzer.csproj" />
+        <ProjectReference Include="..\Lucene.Net.Jieba.Segment\Lucene.Net.Jieba.Segment.csproj" />
     </ItemGroup>
 </Project>
