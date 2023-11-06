@@ -1,16 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\common.props" />
+	
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
 		<PackageId>Lucene.Net.Jieba.Analyzer</PackageId>
-		<PackageVersion>4.8.0-beta00016</PackageVersion>
-		<Authors>damon</Authors>
-		<Description>JIEba.Lucene.Net is an analyzer tools for lucene.net which is kind to chinese</Description>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageProjectUrl>https://github.com/SilentCC/JIEba-netcore2.0/</PackageProjectUrl>
-		<Copyright>Copyright 2019 (c) Nerosoft. All rights reserved.</Copyright>
-		<PackageTags>Analyzer Segment JIEba.net</PackageTags>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -26,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.9" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

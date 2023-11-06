@@ -1,48 +1,46 @@
 ﻿using Microsoft.Extensions.FileProviders;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace Lucene.Net.Jieba.Segment.Common
+namespace Lucene.Net.Jieba.Segment.Common;
+
+public static class FileExtension
 {
-    public static class FileExtension
+    public static string ReadEmbeddedAllLine(string path)
     {
-        public static string ReadEmbeddedAllLine(string path)
-        {
-            return ReadEmbeddedAllLine(path, Encoding.UTF8);
-        }
+        return ReadEmbeddedAllLine(path, Encoding.UTF8);
+    }
 
-        public static string ReadEmbeddedAllLine(string path,Encoding encoding)
+    public static string ReadEmbeddedAllLine(string path,Encoding encoding)
+    {
+        var provider = new EmbeddedFileProvider(typeof(FileExtension).GetTypeInfo().Assembly);
+        var fileInfo = provider.GetFileInfo(path);
+        using (var sr = new StreamReader(fileInfo.CreateReadStream(), encoding))
         {
-            var provider = new EmbeddedFileProvider(typeof(FileExtension).GetTypeInfo().Assembly);
-            var fileInfo = provider.GetFileInfo(path);
-            using (var sr = new StreamReader(fileInfo.CreateReadStream(), encoding))
+            return sr.ReadToEnd();
+        }
+    }
+
+    public static List<string> ReadEmbeddedAllLines(string path, Encoding encoding)
+    {
+        var provider = new EmbeddedFileProvider(typeof(FileExtension).GetTypeInfo().Assembly);
+        var fileInfo = provider.GetFileInfo(path);
+        List<string> list = new List<string>();
+        using (StreamReader streamReader = new StreamReader(fileInfo.CreateReadStream(), encoding))
+        {
+            string item;
+            while ((item = streamReader.ReadLine()) != null)
             {
-                return sr.ReadToEnd();
+                list.Add(item);
             }
         }
+        return list;
+    }
 
-        public static List<string> ReadEmbeddedAllLines(string path, Encoding encoding)
-        {
-            var provider = new EmbeddedFileProvider(typeof(FileExtension).GetTypeInfo().Assembly);
-            var fileInfo = provider.GetFileInfo(path);
-            List<string> list = new List<string>();
-            using (StreamReader streamReader = new StreamReader(fileInfo.CreateReadStream(), encoding))
-            {
-                string item;
-                while ((item = streamReader.ReadLine()) != null)
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
-        }
-
-        public static List<string> ReadEmbeddedAllLines(string path)
-        {
-            return ReadEmbeddedAllLines(path, Encoding.UTF8);
-        }
+    public static List<string> ReadEmbeddedAllLines(string path)
+    {
+        return ReadEmbeddedAllLines(path, Encoding.UTF8);
     }
 }

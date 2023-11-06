@@ -1,14 +1,13 @@
-﻿namespace Lucene.Net.Jieba.Segment
-{
-    public class Node
-    {
-        public char Value { get; private set; }
-        public Node Parent { get; private set; }
+﻿namespace Lucene.Net.Jieba.Segment;
 
-        public Node(char value, Node parent)
-        {
-            Value = value;
-            Parent = parent;
-        }
+public class Node
+{
+    public char Value { get; private set; }
+    public Node Parent { get; private set; }
+
+    public Node(char value, Node parent)
+    {
+        Value = value;
+        Parent = parent;
     }
 }

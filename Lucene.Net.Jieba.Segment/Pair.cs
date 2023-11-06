@@ -1,19 +1,18 @@
-﻿namespace Lucene.Net.Jieba.Segment
+﻿namespace Lucene.Net.Jieba.Segment;
+
+public class Pair<TKey>
 {
-    public class Pair<TKey>
+    public TKey Key { get;set; }
+    public double Freq { get; set; }
+
+    public Pair(TKey key, double freq)
     {
-        public TKey Key { get;set; }
-        public double Freq { get; set; }
+        Key = key;
+        Freq = freq;
+    }
 
-        public Pair(TKey key, double freq)
-        {
-            Key = key;
-            Freq = freq;
-        }
-
-        public override string ToString()
-        {
-            return "Candidate [Key=" + Key + ", Freq=" + Freq + "]";
-        }
+    public override string ToString()
+    {
+        return "Candidate [Key=" + Key + ", Freq=" + Freq + "]";
     }
 }
