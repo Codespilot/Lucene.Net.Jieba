@@ -1,33 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="..\common.props" />
+
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
         <PackageId>Lucene.Net.Jieba</PackageId>
-        <PackageVersion>4.8.0-beta00014</PackageVersion>
-        <Authors>damon</Authors>
-        <Description>Lucene.Net.Jieba is an analyzer tools for lucene.net which is kind to chinese</Description>
-        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-        <PackageProjectUrl>https://github.com/SilentCC/JIEba-netcore2.0/</PackageProjectUrl>
-        <Copyright>Copyright 2018 (c) Nerosoft. All rights reserved.</Copyright>
-        <PackageTags>Analyzer Segment JIEba.net</PackageTags>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="Lucene.Net" Version="4.8.0-*"/>
-        <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-*"/>
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="5.*"/>
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.*"/>
+        <PackageReference Include="Lucene.Net" Version="$(LuceneVersion)" />
+        <PackageReference Include="Lucene.Net.Analysis.Common" Version="$(LuceneVersion)" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
     </ItemGroup>
     <ItemGroup>
-        <None Remove="stopwords.txt"/>
+        <None Remove="stopwords.txt" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Resources\stopwords.txt"/>
+        <EmbeddedResource Include="Resources\stopwords.txt" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Lucene.Net.Jieba.Analyzer\Lucene.Net.Jieba.Analyzer.csproj"/>
-        <ProjectReference Include="..\Lucene.Net.Jieba.Segment\Lucene.Net.Jieba.Segment.csproj"/>
+        <ProjectReference Include="..\Lucene.Net.Jieba.Analyzer\Lucene.Net.Jieba.Analyzer.csproj" />
+        <ProjectReference Include="..\Lucene.Net.Jieba.Segment\Lucene.Net.Jieba.Segment.csproj" />
     </ItemGroup>
 </Project>

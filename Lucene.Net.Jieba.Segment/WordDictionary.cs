@@ -8,130 +8,129 @@ using Lucene.Net.Jieba.Segment.Common;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
 
-namespace Lucene.Net.Jieba.Segment
+namespace Lucene.Net.Jieba.Segment;
+
+public class WordDictionary
 {
-    public class WordDictionary
+    private static readonly Lazy<WordDictionary> lazy = new Lazy<WordDictionary>(() => new WordDictionary());
+    private static readonly string MainDict = ConfigManager.MainDictFile;
+
+    internal IDictionary<string, int> Trie = new Dictionary<string, int>();
+
+    /// <summary>
+    /// total occurrence of all words.
+    /// </summary>
+    public double Total { get; set; }
+
+    private WordDictionary()
     {
-        private static readonly Lazy<WordDictionary> lazy = new Lazy<WordDictionary>(() => new WordDictionary());
-        private static readonly string MainDict = ConfigManager.MainDictFile;
+        LoadDict();
 
-        internal IDictionary<string, int> Trie = new Dictionary<string, int>();
+        Debug.WriteLine("{0} words (and their prefixes)", Trie.Count);
+        Debug.WriteLine("total freq: {0}", Total);
+    }
 
-        /// <summary>
-        /// total occurrence of all words.
-        /// </summary>
-        public double Total { get; set; }
+    public static WordDictionary Instance
+    {
+        get { return lazy.Value; }
+    }
 
-        private WordDictionary()
+    private void LoadDict()
+    {
+        try
         {
-            LoadDict();
-
-            Debug.WriteLine("{0} words (and their prefixes)", Trie.Count);
-            Debug.WriteLine("total freq: {0}", Total);
-        }
-
-        public static WordDictionary Instance
-        {
-            get { return lazy.Value; }
-        }
-
-        private void LoadDict()
-        {
-            try
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var filePath = ConfigManager.MainDictFile;
+            var provider = new EmbeddedFileProvider(GetType().GetTypeInfo().Assembly);
+            var fileInfo = provider.GetFileInfo(filePath);
+            using (var sr = new StreamReader(fileInfo.CreateReadStream(), Encoding.UTF8))
             {
-                var stopWatch = new Stopwatch();
-                stopWatch.Start();
-                var filePath = ConfigManager.MainDictFile;
-                var provider = new EmbeddedFileProvider(GetType().GetTypeInfo().Assembly);
-                var fileInfo = provider.GetFileInfo(filePath);
-                using (var sr = new StreamReader(fileInfo.CreateReadStream(), Encoding.UTF8))
+                string line = null;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    string line = null;
-                    while ((line = sr.ReadLine()) != null)
+                    var tokens = line.Split(' ');
+                    if (tokens.Length < 2)
                     {
-                        var tokens = line.Split(' ');
-                        if (tokens.Length < 2)
+                        Debug.Fail(string.Format("Invalid line: {0}", line));
+                        continue;
+                    }
+
+                    var word = tokens[0];
+                    var freq = int.Parse(tokens[1]);
+
+                    Trie[word] = freq;
+                    Total += freq;
+
+                    foreach (var ch in Enumerable.Range(0, word.Length))
+                    {
+                        var wfrag = word.Sub(0, ch + 1);
+                        if (!Trie.ContainsKey(wfrag))
                         {
-                            Debug.Fail(string.Format("Invalid line: {0}", line));
-                            continue;
-                        }
-
-                        var word = tokens[0];
-                        var freq = int.Parse(tokens[1]);
-
-                        Trie[word] = freq;
-                        Total += freq;
-
-                        foreach (var ch in Enumerable.Range(0, word.Length))
-                        {
-                            var wfrag = word.Sub(0, ch + 1);
-                            if (!Trie.ContainsKey(wfrag))
-                            {
-                                Trie[wfrag] = 0;
-                            }
+                            Trie[wfrag] = 0;
                         }
                     }
                 }
+            }
 
-                stopWatch.Stop();
-                Debug.WriteLine("main dict load finished, time elapsed {0} ms", stopWatch.ElapsedMilliseconds);
-            }
-            catch (IOException e)
-            {
-                Debug.Fail(string.Format("{0} load failure, reason: {1}", MainDict, e.Message));
-            }
-            catch (FormatException fe)
-            {
-                Debug.Fail(fe.Message);
-            }
+            stopWatch.Stop();
+            Debug.WriteLine("main dict load finished, time elapsed {0} ms", stopWatch.ElapsedMilliseconds);
         }
-
-        public bool ContainsWord(string word)
+        catch (IOException e)
         {
-            return Trie.ContainsKey(word) && Trie[word] > 0;
+            Debug.Fail(string.Format("{0} load failure, reason: {1}", MainDict, e.Message));
+        }
+        catch (FormatException fe)
+        {
+            Debug.Fail(fe.Message);
+        }
+    }
+
+    public bool ContainsWord(string word)
+    {
+        return Trie.ContainsKey(word) && Trie[word] > 0;
+    }
+
+    public int GetFreqOrDefault(string key)
+    {
+        if (ContainsWord(key))
+            return Trie[key];
+        else
+            return 1;
+    }
+
+    public void AddWord(string word, int freq, string tag = null)
+    {
+        if (ContainsWord(word))
+        {
+            Total -= Trie[word];
         }
 
-        public int GetFreqOrDefault(string key)
+        Trie[word] = freq;
+        Total += freq;
+        for (var i = 0; i < word.Length; i++)
         {
-            if (ContainsWord(key))
-                return Trie[key];
-            else
-                return 1;
-        }
-
-        public void AddWord(string word, int freq, string tag = null)
-        {
-            if (ContainsWord(word))
+            var wfrag = word.Substring(0, i + 1);
+            if (!Trie.ContainsKey(wfrag))
             {
-                Total -= Trie[word];
-            }
-
-            Trie[word] = freq;
-            Total += freq;
-            for (var i = 0; i < word.Length; i++)
-            {
-                var wfrag = word.Substring(0, i + 1);
-                if (!Trie.ContainsKey(wfrag))
-                {
-                    Trie[wfrag] = 0;
-                }
+                Trie[wfrag] = 0;
             }
         }
+    }
 
-        public void DeleteWord(string word)
+    public void DeleteWord(string word)
+    {
+        AddWord(word, 0);
+    }
+
+    internal int SuggestFreq(string word, IEnumerable<string> segments)
+    {
+        double freq = 1;
+        foreach (var seg in segments)
         {
-            AddWord(word, 0);
+            freq *= GetFreqOrDefault(seg) / Total;
         }
 
-        internal int SuggestFreq(string word, IEnumerable<string> segments)
-        {
-            double freq = 1;
-            foreach (var seg in segments)
-            {
-                freq *= GetFreqOrDefault(seg) / Total;
-            }
-
-            return Math.Max((int)(freq * Total) + 1, GetFreqOrDefault(word));
-        }
+        return Math.Max((int)(freq * Total) + 1, GetFreqOrDefault(word));
     }
 }

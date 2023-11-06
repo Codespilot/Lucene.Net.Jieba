@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Lucene.Net.Jieba.Segment
+namespace Lucene.Net.Jieba.Segment;
+
+public class DefaultDictionary<TKey, TValue> : Dictionary<TKey, TValue>
 {
-    public class DefaultDictionary<TKey, TValue> : Dictionary<TKey, TValue>
+    public new TValue this[TKey key]
     {
-        public new TValue this[TKey key]
+        get
         {
-            get
+            if (!ContainsKey(key))
             {
-                if (!ContainsKey(key))
-                {
-                    Add(key, default(TValue));
-                }
-                return base[key];
+                Add(key, default);
             }
-            set { base[key] = value; }
+            return base[key];
         }
+        set => base[key] = value;
     }
 }

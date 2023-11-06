@@ -1,35 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <PackageId>Lucene.Net.Jieba.Analyzer</PackageId>
-    <PackageVersion>4.8.0-beta00014</PackageVersion>
-    <Authors>damon</Authors>
-    <Description>JIEba.Lucene.Net is an analyzer tools for lucene.net which is kind to chinese</Description>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/SilentCC/JIEba-netcore2.0/</PackageProjectUrl>
-    <Copyright>Copyright 2019 (c) Nerosoft. All rights reserved.</Copyright>
-    <PackageTags>Analyzer Segment JIEba.net</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+	<Import Project="..\common.props" />
+	
+	<PropertyGroup>
+		<PackageId>Lucene.Net.Jieba.Analyzer</PackageId>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\idf.txt" />
-    <None Remove="Resources\stopwords.txt" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Resources\idf.txt" />
+		<None Remove="Resources\stopwords.txt" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\idf.txt">
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\stopwords.txt">
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\idf.txt">
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\stopwords.txt">
+		</EmbeddedResource>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.*" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Lucene.Net.Jieba.Segment\Lucene.Net.Jieba.Segment.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Lucene.Net.Jieba.Segment\Lucene.Net.Jieba.Segment.csproj" />
+	</ItemGroup>
 </Project>

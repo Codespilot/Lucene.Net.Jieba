@@ -1,0 +1,52 @@
+<Project>
+    <PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+        <Version>4.8.0-beta00018</Version>
+        <Authors>damon</Authors>
+        <Company>Nerosoft Co., Ltd.</Company>
+        <Copyright>© 2018-2023 Nerosoft. All Rights Reserved.</Copyright>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <LangVersion>latest</LangVersion>
+		<Description>Lucene.Net.Jieba is an analyzer tools for lucene.net which is kind to chinese</Description>
+        <Configurations>Debug;Release;Product</Configurations>
+		<PackageTags>Analyzer Segment JIEba.net</PackageTags>
+		<PackageProjectUrl>https://github.com/Codespilot/Lucene.Net.Jieba/</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <LuceneVersion>4.8.0-beta00016</LuceneVersion>
+        <FileProvidersEmbeddedVersion>7.0.13</FileProvidersEmbeddedVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+        <DebugType>full</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
+        <DebugType>pdbonly</DebugType>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <NoWarn>1591</NoWarn>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)'=='Product' ">
+        <DebugType>pdbonly</DebugType>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <NoWarn>1591</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="System" />
+        <Using Include="System.Collections" />
+		<Using Include="System.Collections.Generic" />
+		<Using Include="System.Linq" />
+		<Using Include="System.Text" />
+        <Using Include="System.Threading" />
+        <Using Include="System.Threading.Tasks" />
+    </ItemGroup>
+</Project>
